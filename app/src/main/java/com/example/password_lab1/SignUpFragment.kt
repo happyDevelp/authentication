@@ -72,13 +72,15 @@ class SignUpFragment : Fragment() {
         var ch: Char
         var capitalFlag = false
         var lowerFlag = false
+        var numFlag = false
 
         for (elem in str) {
             ch = elem
             if (ch.isUpperCase()) capitalFlag = true
             else if (ch.isLowerCase()) lowerFlag = true
+            else if (ch.isDigit()) numFlag = true
 
-            if (capitalFlag && lowerFlag) return true
+            if (capitalFlag && lowerFlag && numFlag) return true
         }
         return false
 
