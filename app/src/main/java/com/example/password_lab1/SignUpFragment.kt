@@ -42,32 +42,20 @@ class SignUpFragment : Fragment() {
 
             if (name.length >= 4 && password.length >= 8 && checkString(password)) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    var nameInDb = findName(name)
+                    val nameInDb = findUserByName(name)
 
                     if (nameInDb == null) {
                         val user = UserEntity(null, name, password)
                         insertUser(user)
-                        findNavController().navigate(R.id.action_signUpFragment_to_insideFragment)
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "This name already used",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                        navigateToInside()
+                    } else toastAlreadyUsed()
                 }
 
-            } else {
-                Toast.makeText(
-                    context,
-                    "length of name >= 4,password >= 8, pass should contain big letters",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            } else toastWrongName()
         }
     }
 
-    private suspend fun findName(name: String): UserEntity? {
+    private suspend fun findUserByName(name: String): UserEntity? {
         return withContext(Dispatchers.IO) {
             myDB.userDao.getUserByName(name)
         }
@@ -80,7 +68,7 @@ class SignUpFragment : Fragment() {
     }
 
 
-    fun checkString(str: String): Boolean {
+    private fun checkString(str: String): Boolean {
         var ch: Char
         var capitalFlag = false
         var lowerFlag = false
@@ -94,5 +82,25 @@ class SignUpFragment : Fragment() {
         }
         return false
 
+    }
+
+    private fun toastAlreadyUsed() {
+        Toast.makeText(
+            context,
+            "This name already used",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun toastWrongName() {
+        Toast.makeText(
+            context,
+            "length of name >= 4,password >= 8, pass should contain big letters",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun navigateToInside() {
+        findNavController().navigate(R.id.action_signUpFragment_to_insideFragment)
     }
 }
