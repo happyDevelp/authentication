@@ -11,4 +11,6 @@
     <string name="your_name">Your name</string>
     <string name="connect">Connect</string>
     <string name="login_logFr">LogIn</string>
+    <string name="exit">Exit</string>
+    <string name="you_have_successfully_logged_in">You have successfully logged in!</string>
 </resources>

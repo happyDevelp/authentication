@@ -43,5 +43,9 @@
         android:id="@+id/insideFragment"
         android:name="com.example.password_lab1.InsideFragment"
         android:label="inside_fragment"
-        tools:layout="@layout/inside_fragment" />
+        tools:layout="@layout/inside_fragment" >
+        <action
+            android:id="@+id/action_insideFragment_to_titleFragment"
+            app:destination="@id/titleFragment" />
+    </fragment>
 </navigation>

@@ -33,7 +33,7 @@ class LogInFragment : Fragment() {
         myDB = UserDatabase.getInstance(requireContext())
 
         binding.btnLogIn.setOnClickListener {
-            val name:String = binding.edTextNickname.text.toString()
+            val name = binding.edTextNickname.text.toString()
             val password = binding.edTextPassword.text.toString()
             CoroutineScope(Dispatchers.Main).launch{
                 val userInDb = findUserByName(name)

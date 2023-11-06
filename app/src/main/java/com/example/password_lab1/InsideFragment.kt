@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.password_lab1.databinding.InsideFragmentBinding
 
 class InsideFragment : Fragment() {
@@ -20,6 +21,10 @@ class InsideFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnExit.setOnClickListener {
+            findNavController().navigate(R.id.action_insideFragment_to_titleFragment)
+        }
 
     }
 
