@@ -35,20 +35,57 @@ class LogInFragment : Fragment() {
         binding.btnLogIn.setOnClickListener {
             val name = binding.edTextNickname.text.toString()
             val password = binding.edTextPassword.text.toString()
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.Main).launch {
                 val userInDb = findUserByName(name)
-                if (userInDb != null) {
-                    val nameDB = userInDb.userName
-                    val passwordDB = userInDb.userPassword
 
-                    if (name == nameDB && password == passwordDB)
-                        navigateToInside()
-                    else toastError()
-                }
-                else toastNoUser()
+                if (userInDb != null) {
+                    if (password == userInDb.userPassword){
+                        val passwordExpiryDay = 7
+
+                        if ((passwordExpiryDay - passwordAge(name)) >= 0) {
+                            val nameDB = userInDb.userName
+
+                            if (name == nameDB)
+                                navigateToInside()
+                            else toastError()
+
+                            Toast.makeText(
+                                context,
+                                "Password expire in ${(passwordExpiryDay - passwordAge(name))} day(s)",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            toastExpired()
+                            changePass()
+
+                        }
+                    } else toastInvalidPassword()
+
+
+                } else toastNoUser()
 
             }
         }
+    }
+
+
+
+    private fun changePass() {
+        findNavController().navigate(R.id.action_logInFragment_to_changePasswordFragment)
+    }
+
+    private suspend fun getUserMilli(userName: String): Long {
+        return withContext(Dispatchers.IO) {
+            myDB.userDao.getUserMilli(userName)
+        }
+    }
+
+    private suspend fun passwordAge(userName: String): Long {
+        val currentTime = System.currentTimeMillis()
+        val passwordTimeCreated = getUserMilli(userName)
+
+        val passwordAge = (currentTime - passwordTimeCreated) / (1000 * 60 * 60 * 24 )
+        return passwordAge
     }
 
     private suspend fun findUserByName(user: String): UserEntity? {
@@ -56,6 +93,15 @@ class LogInFragment : Fragment() {
             myDB.userDao.getUserByName(user)
         }
     }
+
+    private fun toastInvalidPassword() {
+        Toast.makeText(
+            context,
+            "Invalid password",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
     private fun toastNoUser() {
         Toast.makeText(
             context,
@@ -72,7 +118,15 @@ class LogInFragment : Fragment() {
         ).show()
     }
 
-    private fun navigateToInside(){
+    private fun toastExpired() {
+        Toast.makeText(
+            context,
+            "Password already expired, update it",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun navigateToInside() {
         findNavController().navigate(R.id.action_logInFragment_to_insideFragment)
     }
 

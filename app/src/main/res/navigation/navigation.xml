@@ -38,6 +38,9 @@
             android:id="@+id/action_logInFragment_to_insideFragment"
             app:destination="@id/insideFragment"
             app:popUpTo="@id/titleFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/insideFragment"
@@ -47,5 +50,14 @@
         <action
             android:id="@+id/action_insideFragment_to_titleFragment"
             app:destination="@id/titleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.password_lab1.ChangePasswordFragment"
+        android:label="ChangePasswordFragment"
+        tools:layout="@layout/change_password_fragment">
+        <action
+            android:id="@+id/action_changePasswordFragment_to_logInFragment"
+            app:destination="@id/logInFragment" />
     </fragment>
 </navigation>

@@ -13,4 +13,8 @@
     <string name="login_logFr">LogIn</string>
     <string name="exit">Exit</string>
     <string name="you_have_successfully_logged_in">You have successfully logged in!</string>
+    <string name="change_password">Change password</string>
+    <string name="new_password">New password</string>
+    <string name="change">Change</string>
+    <string name="your_name_inChangePass">Your name</string>
 </resources>

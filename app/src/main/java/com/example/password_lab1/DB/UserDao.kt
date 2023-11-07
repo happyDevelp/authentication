@@ -10,6 +10,7 @@ interface UserDao {
     @Insert
     fun insert(user: UserEntity)
 
+   /* @Query("UPDATE user_table SET user_password = ")*/
     @Update
     fun update(user: UserEntity)
 
@@ -21,5 +22,8 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table WHERE user_name = :username")
     fun getUserByName(username: String): UserEntity?
+
+    @Query("SELECT start_milli FROM user_table WHERE user_name = :userName")
+    fun getUserMilli(userName: String): Long
 
 }

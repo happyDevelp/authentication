@@ -42,18 +42,21 @@ class SignUpFragment : Fragment() {
 
             if (name.length >= 4 && password.length >= 8 && checkString(password)) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val nameInDb = findUserByName(name)
+                    val userInDb = findUserByName(name)
 
-                    if (nameInDb == null) {
-                        val user = UserEntity(null, name, password)
+                    if (userInDb == null) {
+                        val currentMilliSec = System.currentTimeMillis()
+                        val user = UserEntity(null, name, password, currentMilliSec)
                         insertUser(user)
                         navigateToInside()
+
                     } else toastAlreadyUsed()
                 }
 
             } else toastWrongName()
         }
     }
+
 
     private suspend fun findUserByName(name: String): UserEntity? {
         return withContext(Dispatchers.IO) {
@@ -98,6 +101,14 @@ class SignUpFragment : Fragment() {
         Toast.makeText(
             context,
             "length of name >= 4,password >= 8, pass should contain big letters",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
+    private fun toastExpired() {
+        Toast.makeText(
+            context,
+            "Password already expired, update it",
             Toast.LENGTH_LONG
         ).show()
     }

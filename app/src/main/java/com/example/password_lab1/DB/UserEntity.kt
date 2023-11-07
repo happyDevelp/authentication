@@ -12,6 +12,10 @@ data class UserEntity (
     @ColumnInfo(name = "user_name")
     val userName: String,
 
-    @ColumnInfo
-    val userPassword: String
+    @ColumnInfo(name = "user_password")
+    var userPassword: String,
+
+    @ColumnInfo(name = "start_milli")
+    var startMilli: Long
+
 )
