@@ -1,4 +1,4 @@
-package com.example.password_lab1
+package com.example.password_lab1.SignUp
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,20 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.password_lab1.DB.UserDao
 import com.example.password_lab1.DB.UserDatabase
 import com.example.password_lab1.DB.UserEntity
 import com.example.password_lab1.databinding.SignUpFragmentBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class SignUpFragment : Fragment() {
-    lateinit var binding: SignUpFragmentBinding
-    lateinit var myDB: UserDatabase
+class SignUpFragment(val database: UserDao) : Fragment() {
+    private lateinit var binding: SignUpFragmentBinding
+    private lateinit var myDB: UserDatabase
 
 
     override fun onCreateView(
@@ -35,6 +36,12 @@ class SignUpFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         myDB = UserDatabase.getInstance(requireContext())
 
+        val application = requireNotNull(this.activity).application
+        val dataSource = UserDatabase.getInstance(application).userDao
+        val viewModelFactory = SignUpViewModelFactory(dataSource)
+        val viewModel = ViewModelProvider(this, viewModelFactory).get(SignUpViewModel::class.java)
+
+
 
         binding.btnCreate.setOnClickListener {
             val name = binding.edTextNickname.text.toString()
@@ -49,7 +56,6 @@ class SignUpFragment : Fragment() {
                         val user = UserEntity(null, name, password, currentMilliSec)
                         insertUser(user)
                         findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToInsideFragment(name))
-
 
                     } else toastAlreadyUsed()
                 }
