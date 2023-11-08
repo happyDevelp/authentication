@@ -40,7 +40,8 @@
             app:popUpTo="@id/titleFragment" />
         <action
             android:id="@+id/action_logInFragment_to_changePasswordFragment"
-            app:destination="@id/changePasswordFragment" />
+            app:destination="@id/changePasswordFragment"
+            app:popUpTo="@id/titleFragment" />
     </fragment>
     <fragment
         android:id="@+id/insideFragment"
@@ -49,7 +50,13 @@
         tools:layout="@layout/inside_fragment" >
         <action
             android:id="@+id/action_insideFragment_to_titleFragment"
-            app:destination="@id/titleFragment" />
+            app:destination="@id/titleFragment"
+            app:popUpTo="@id/titleFragment" />
+        <argument android:name="userNameArg" />
+        <action
+            android:id="@+id/action_insideFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment"
+            app:popUpTo="@id/titleFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -58,6 +65,7 @@
         tools:layout="@layout/change_password_fragment">
         <action
             android:id="@+id/action_changePasswordFragment_to_logInFragment"
-            app:destination="@id/logInFragment" />
+            app:destination="@id/logInFragment"
+            app:popUpTo="@id/titleFragment" />
     </fragment>
 </navigation>

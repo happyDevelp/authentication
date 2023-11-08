@@ -39,25 +39,22 @@ class LogInFragment : Fragment() {
                 val userInDb = findUserByName(name)
 
                 if (userInDb != null) {
-                    if (password == userInDb.userPassword){
-                        val passwordExpiryDay = 7
+                    if (password == userInDb.userPassword) {
+                        val passwordExpiryDay: Long = 7
+                        val diff = passwordExpiryDay - passwordAge(name)
 
-                        if ((passwordExpiryDay - passwordAge(name)) >= 0) {
+                        if (diff >= 0) {
                             val nameDB = userInDb.userName
 
-                            if (name == nameDB)
-                                navigateToInside()
-                            else toastError()
+                            if (name == nameDB) {
+                                navigateToInside(nameDB)
+                                toastWhenExpired(diff)
 
-                            Toast.makeText(
-                                context,
-                                "Password expire in ${(passwordExpiryDay - passwordAge(name))} day(s)",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            } else toastError()
+
                         } else {
                             toastExpired()
-                            changePass()
-
+                            navToChangePassword()
                         }
                     } else toastInvalidPassword()
 
@@ -66,11 +63,11 @@ class LogInFragment : Fragment() {
 
             }
         }
+
     }
 
 
-
-    private fun changePass() {
+    private fun navToChangePassword() {
         findNavController().navigate(R.id.action_logInFragment_to_changePasswordFragment)
     }
 
@@ -84,7 +81,8 @@ class LogInFragment : Fragment() {
         val currentTime = System.currentTimeMillis()
         val passwordTimeCreated = getUserMilli(userName)
 
-        val passwordAge = (currentTime - passwordTimeCreated) / (1000 * 60 * 60 * 24 )
+        val passwordAge =
+            (currentTime - passwordTimeCreated) / (1000 * 60 * 60 * 24) //hours-1000 * 60 * 60, minutes-1000 * 60, sec-1000
         return passwordAge
     }
 
@@ -92,6 +90,14 @@ class LogInFragment : Fragment() {
         return withContext(Dispatchers.IO) {
             myDB.userDao.getUserByName(user)
         }
+    }
+
+    private fun toastWhenExpired(diff: Long) {
+        Toast.makeText(
+            context,
+            "Password expire in $diff day(s)",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun toastInvalidPassword() {
@@ -126,8 +132,11 @@ class LogInFragment : Fragment() {
         ).show()
     }
 
-    private fun navigateToInside() {
-        findNavController().navigate(R.id.action_logInFragment_to_insideFragment)
+
+    private fun navigateToInside(user: String) {
+        findNavController().navigate(
+            LogInFragmentDirections.actionLogInFragmentToInsideFragment(user)
+        )
     }
 
 }

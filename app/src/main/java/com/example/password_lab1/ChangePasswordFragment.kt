@@ -17,8 +17,8 @@ import kotlinx.coroutines.withContext
 
 
 class ChangePasswordFragment : Fragment() {
-    lateinit var binding: ChangePasswordFragmentBinding
-    lateinit var myDB: UserDatabase
+    private lateinit var binding: ChangePasswordFragmentBinding
+    private lateinit var myDB: UserDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,17 +45,18 @@ class ChangePasswordFragment : Fragment() {
 
         if (newPassword.length >= 8 && checkString(newPassword)) {
             CoroutineScope(Dispatchers.Main).launch {
-                var user = getUserByName(name)
+                val user = getUserByName(name)
 
                 if (user != null) {
-                    user.userPassword = newPassword
                     val currentTime = System.currentTimeMillis()
                     val updatedUser = UserEntity(user.userId, name, newPassword, currentTime)
                     userUpdate(updatedUser)
+                    nameChanged()
 
                 } else toastNameNotExist()
 
             }
+
         } else toastWrongName()
 
 
@@ -72,8 +73,6 @@ class ChangePasswordFragment : Fragment() {
         return withContext(Dispatchers.IO) {
             myDB.userDao.getUserByName(name)
         }
-
-
     }
 
     private fun toastNameNotExist() {
@@ -91,6 +90,15 @@ class ChangePasswordFragment : Fragment() {
             Toast.LENGTH_LONG
         ).show()
     }
+
+    private fun nameChanged() {
+        Toast.makeText(
+            context,
+            "Name successfully changed",
+            Toast.LENGTH_LONG
+        ).show()
+    }
+
 
     private fun checkString(str: String): Boolean {
         var ch: Char

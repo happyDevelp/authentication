@@ -48,7 +48,8 @@ class SignUpFragment : Fragment() {
                         val currentMilliSec = System.currentTimeMillis()
                         val user = UserEntity(null, name, password, currentMilliSec)
                         insertUser(user)
-                        navigateToInside()
+                        findNavController().navigate(SignUpFragmentDirections.actionSignUpFragmentToInsideFragment(name))
+
 
                     } else toastAlreadyUsed()
                 }
@@ -105,15 +106,4 @@ class SignUpFragment : Fragment() {
         ).show()
     }
 
-    private fun toastExpired() {
-        Toast.makeText(
-            context,
-            "Password already expired, update it",
-            Toast.LENGTH_LONG
-        ).show()
-    }
-
-    private fun navigateToInside() {
-        findNavController().navigate(R.id.action_signUpFragment_to_insideFragment)
-    }
 }

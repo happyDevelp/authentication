@@ -10,12 +10,8 @@ interface UserDao {
     @Insert
     fun insert(user: UserEntity)
 
-   /* @Query("UPDATE user_table SET user_password = ")*/
     @Update
     fun update(user: UserEntity)
-
-    @Query("SELECT * FROM user_table WHERE userId = :keyId")
-    fun get(keyId: Int): UserEntity?
 
     @Query("SELECT * FROM user_table")
     fun getAllUsers(): List<UserEntity>
